@@ -16,8 +16,15 @@ public class SpringDataUserRepository implements UserRepository {
     public void add(User user) {
         userRepository.save(UserMapper.toEntity(user));
     }
+
+    @Override
+    public User findByEmail(String email) {
+        UserEntity user = userRepository.findByEmail(email);
+        return user == null ? null : UserMapper.toDomain(user);
+    }
 }
 
 @Repository
 interface JpaUserRepository extends JpaRepository<UserEntity, String> {
+    UserEntity findByEmail(String email);
 }

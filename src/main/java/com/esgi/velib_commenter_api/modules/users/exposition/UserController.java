@@ -4,12 +4,11 @@ import com.esgi.velib_commenter_api.modules.users.application.CreateUser;
 import com.esgi.velib_commenter_api.modules.users.domain.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -30,5 +29,10 @@ public class UserController {
         );
         userService.createUser(createUser);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<Void> on() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }
