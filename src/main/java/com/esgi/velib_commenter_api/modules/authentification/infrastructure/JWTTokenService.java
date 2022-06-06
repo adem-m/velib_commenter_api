@@ -1,5 +1,6 @@
 package com.esgi.velib_commenter_api.modules.authentification.infrastructure;
 
+import com.esgi.velib_commenter_api.modules.authentification.application.NoTokenProvidedException;
 import com.esgi.velib_commenter_api.modules.authentification.domain.Token;
 import com.esgi.velib_commenter_api.modules.authentification.domain.TokenService;
 import com.esgi.velib_commenter_api.modules.authentification.domain.TokenUtils;
@@ -50,6 +51,10 @@ public class JWTTokenService implements TokenService {
 
     @Override
     public String getUserId(Token token) {
+        if (token == null || token.value() == null || token.value().equals("")) {
+            throw new NoTokenProvidedException();
+        }
+
         Claims body = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(TokenUtils.getTokenValue(token)).getBody();
