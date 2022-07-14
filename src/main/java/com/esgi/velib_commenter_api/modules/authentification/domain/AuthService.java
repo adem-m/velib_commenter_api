@@ -33,6 +33,6 @@ public class AuthService {
             log.error("Password mismatch for user {}", login.email());
             throw new AuthenticationFailedException();
         }
-        return tokenService.generateToken(user.email(), user.id());
+        return tokenService.generateToken(user.id());
     }
 }

@@ -26,7 +26,7 @@ public class JWTTokenService implements TokenService {
     private static final int EXPIRATION_TIME = SEVEN_DAYS;
 
     @Override
-    public Token generateToken(String email, String userId) {
+    public Token generateToken(String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
         long nowMillis = System.currentTimeMillis();
@@ -37,8 +37,8 @@ public class JWTTokenService implements TokenService {
 
         JwtBuilder builder = Jwts.builder()
                 .setIssuedAt(now)
-                .setSubject(email)
-                .setIssuer(userId)
+                .setSubject(userId)
+                .setIssuer("velib-commenter-api")
                 .signWith(signatureAlgorithm, signingKey);
 
         long expMillis = nowMillis + EXPIRATION_TIME;
